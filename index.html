@@ -9,16 +9,25 @@
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          var dt = new Date();
-          var time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + '...' + time);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+        var refresh = function() {
+          $body.html('');
+          var index = streams.home.length - 1;
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var $tweet = $('<div></div>');
+            var dt = tweet.created_at;
+            var time = dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds();
+            $tweet.text('@' + tweet.user + ': ' + tweet.message + '...' + time);
+            var userName = tweet.user;
+            var userStream = streams.users[userName];
+            $tweet.on('click', function () {
+              console.log(userStream); 
+            });
+            $tweet.appendTo($body);
+            index -= 1;
+          }
+        };
+        setInterval(refresh, 2000);
       });
     </script>
   </body>
